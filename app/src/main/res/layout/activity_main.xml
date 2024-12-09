@@ -5,15 +5,34 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@color/ourColor"
+    tools:context=".MainActivity" >
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:id="@+id/initialScreenText"
+        android:layout_width="213dp"
+        android:layout_height="134dp"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center"
+        android:text="Learn A New Language"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.263" />
 
+    <Button
+        android:id="@+id/initialScreenButton"
+        android:layout_width="207dp"
+        android:layout_height="59dp"
+        android:backgroundTint="#3F51B5"
+        android:text="Continue"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/initialScreenText"
+        app:layout_constraintVertical_bias="0.084"
+        android:onClick="selectionOfLanguageAcitivty"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
