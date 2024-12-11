@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ItemAdapter(private val cursor: Cursor, private val itemAdapterListener: ItemAdapterListener): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class ItemAdapter(private val itemAdapterListener: ItemAdapterListener): RecyclerView.Adapter<ItemAdapter.ViewHolder>(){
     interface ItemAdapterListener{
         fun click(position: Int)
     }
@@ -19,24 +20,13 @@ class ItemAdapter(private val cursor: Cursor, private val itemAdapterListener: I
                 itemAdapterListener.click(position)
             }
         }
-        // init our web view
-        // init our 2 text views
-//        private val webView: WebView = itemView.findViewById(R.id.comicImage)
-//        private val textViewNumber: TextView = itemView.findViewById(R.id.commicNumber)
-//        private val textViewTitle: TextView = itemView.findViewById(R.id.comicTitle)
+        private val textViewLevel: TextView = itemView.findViewById(R.id.recyclerViewTextView)
+        private val imageViewLevel: ImageView = itemView.findViewById(R.id.recyclerViewImage)
 
-        fun update(cursor: Cursor) {
-//            val recyclerViewImg = cursor.getColumnIndex("webImg")
-//            val recyclerViewNumber = cursor.getColumnIndex("comicNumber")
-//            val recyclerViewTitle = cursor.getColumnIndex("comicTitle")
-//
-//            webView.loadUrl(cursor.getString(recyclerViewImg))
-//            textViewNumber.text = cursor.getInt(recyclerViewNumber).toString()
-//            textViewTitle.text = cursor.getString(recyclerViewTitle)
-
+        fun update(levels: Levels) {
+            textViewLevel.text = levels.level.toString()
+            levels.levelImage?.let { imageViewLevel.setImageResource(it) }
         }
-
-
     }
 
 
@@ -46,11 +36,11 @@ class ItemAdapter(private val cursor: Cursor, private val itemAdapterListener: I
     }
 
     override fun onBindViewHolder(holder: ItemAdapter.ViewHolder, position: Int) {
-        cursor.moveToPosition(position)
-        holder.update(cursor)
+        val level = LevelsModel.spanishLevels[position]
+        holder.update(level)
     }
 
     override fun getItemCount(): Int {
-        return cursor.count
+        return LevelsModel.spanishLevels.size
     }
 }

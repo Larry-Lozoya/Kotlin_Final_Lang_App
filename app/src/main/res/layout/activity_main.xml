@@ -35,4 +35,6 @@
         app:layout_constraintTop_toBottomOf="@+id/initialScreenText"
         app:layout_constraintVertical_bias="0.084"
         android:onClick="selectionOfLanguageAcitivty"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
