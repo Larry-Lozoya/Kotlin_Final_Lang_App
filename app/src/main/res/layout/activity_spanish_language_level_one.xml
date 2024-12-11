@@ -9,6 +9,20 @@
     android:orientation="vertical"
     tools:context=".SpanishLanguageLevelOneActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/actOneInstructionsText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <TextView
         android:id="@+id/actOneText"
         android:layout_width="338dp"
@@ -17,10 +31,10 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.352" />
+        app:layout_constraintVertical_bias="0.435" />
 
     <EditText
         android:id="@+id/actOneEditText"
@@ -29,7 +43,7 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="text"
-        android:text="Name"
+        android:text="Enter Text Here..."
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,8 +54,9 @@
 
     <Button
         android:id="@+id/actOneSubmitButton"
-        android:layout_width="326dp"
-        android:layout_height="62dp"
+        android:layout_width="338dp"
+        android:layout_height="83dp"
+        android:onClick="actOneSubmitButton"
         android:text="SUBMIT"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,4 +65,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/actOneEditText"
         app:layout_constraintVertical_bias="0.062" />
+
+    <TextView
+        android:id="@+id/actOneInstructionsText"
+        android:layout_width="329dp"
+        android:layout_height="126dp"
+        android:gravity="center"
+        android:text="Please Provide The Spanish Translation For the Provided English Word."
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/actOneText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.854" />
 </androidx.constraintlayout.widget.ConstraintLayout>
