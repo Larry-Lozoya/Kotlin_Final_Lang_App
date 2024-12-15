@@ -1,5 +1,7 @@
 package com.example.languageapp
 
+import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.os.LocaleList
@@ -7,12 +9,15 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -22,6 +27,8 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Locale
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 
 class SpanishLanguageLevelOneActivity : AppCompatActivity() {
@@ -29,8 +36,12 @@ class SpanishLanguageLevelOneActivity : AppCompatActivity() {
     private lateinit var spanishInput: EditText
     private lateinit var englishTarget: TextView
     private lateinit var databaseHelper: DatabaseHelper
+    private var dbEnglishWord = 0
+    private var dbSpanishWord = 0
     private lateinit var cursor: Cursor
     private var index = 0
+    private var randomInt = 0
+    private var ourNumbers = arrayListOf<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,13 +59,20 @@ class SpanishLanguageLevelOneActivity : AppCompatActivity() {
         spanishInput.setImeHintLocales(LocaleList(Locale("es", "MX")))
         englishTarget = findViewById(R.id.actOneText)
         databaseHelper = DatabaseHelper(applicationContext)
-
-
-        fetchOurSpanishWords()
-
-
+        getOurArray()
+        if(ourNumbers.isNotEmpty()){
+            println(ourNumbers)
+            getRandomWord()
+            println(randomInt)
+        }else if(ourNumbers.isEmpty() && spanishInput.text.isEmpty()){
+//            println(ourNumbers.isEmpty())
+            showAllCorrectDialog()
+        }else{
+            fetchOurSpanishWords()
+        }
 
     }
+
     private fun fetchOurSpanishWords() {
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
@@ -66,8 +84,7 @@ class SpanishLanguageLevelOneActivity : AppCompatActivity() {
                     var result = ""
                     var httpURLConnection: HttpURLConnection? = null
                     try {
-                        var url =
-                            URL("https://api.mymemory.translated.net/get?q=$eachWord&langpair=en|es")
+                        var url = URL("https://api.mymemory.translated.net/get?q=$eachWord&langpair=en|es")
                         httpURLConnection = url.openConnection() as HttpURLConnection
 
                         httpURLConnection.requestMethod = "GET"
@@ -77,8 +94,7 @@ class SpanishLanguageLevelOneActivity : AppCompatActivity() {
 
                         } else {
                             val inputStreamReader = httpURLConnection.inputStream
-                            val bufferedReader =
-                                BufferedReader(InputStreamReader(inputStreamReader))
+                            val bufferedReader = BufferedReader(InputStreamReader(inputStreamReader))
                             result = bufferedReader.readText()
                             bufferedReader.close()
                         }
@@ -102,13 +118,69 @@ class SpanishLanguageLevelOneActivity : AppCompatActivity() {
                     ++index
                 }
             }
+            delay(3000)
+            getOurArray()
+            println(ourNumbers)
+            getRandomWord()
+            println(randomInt)
         }
     }
 
     fun actOneSubmitButton(view: View) {
-        // grab query function to see if we are correct or not
-        // if not do dialog to show they are incorrect
-        // if correct give the next input
-        // if all words have been correct give the user a dialog that they completed level one and finish()
+        if(spanishInput.text.toString() == cursor.getString(dbSpanishWord)){
+//            println(ourNumbers)
+            if(ourNumbers.isNotEmpty()){
+                println(randomInt)
+                Toast.makeText(applicationContext, "YOUR ARE CORRECT!!!", Toast.LENGTH_SHORT).show()
+                databaseHelper.updateIsCorrect(randomInt)
+                getRandomWord()
+                spanishInput.text.clear()
+            }else{
+                databaseHelper.updateIsCorrect(randomInt)
+//                println(randomInt)
+                englishTarget.text = ""
+                showAllCorrectDialog()
+            }
+        }else{
+            Toast.makeText(applicationContext, "YOUR ARE INCORRECT!!!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun getRandomWord(){
+        randomInt = ourNumbers.random()
+        cursor = databaseHelper.getSpanAndEnglishWord(randomInt)
+        if(cursor.moveToFirst()){
+            dbEnglishWord = cursor.getColumnIndexOrThrow("englishWord")
+            englishTarget.text = cursor.getString(dbEnglishWord)
+//            println(cursor.getString(englishWord))
+            dbSpanishWord = cursor.getColumnIndexOrThrow("spanishWord")
+            println(cursor.getString(dbSpanishWord))
+        }
+        ourNumbers.remove(randomInt)
+    }
+
+    private fun showAllCorrectDialog(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Completed")
+        builder.setMessage("You have gotten every entry correct!!")
+
+        builder.setPositiveButton("BACK"){ dialog, which->
+            Toast.makeText(this, "ourBackButton", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, LevelSelectionActivity::class.java)
+            startActivity(intent)
+        }
+        builder.show()
+    }
+
+    private fun getOurArray(){
+        cursor = databaseHelper.getArray()
+        while (cursor.moveToNext()){
+//            println(cursor.getString(0))
+            ourNumbers.add(cursor.getString(0).toInt())
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 }

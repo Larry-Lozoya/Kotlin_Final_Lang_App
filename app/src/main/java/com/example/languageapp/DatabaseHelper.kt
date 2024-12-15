@@ -18,7 +18,8 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
                 _id INTEGER PRIMARY KEY AUTOINCREMENT,
                 englishWord TEXT,
                 spanishWord TEXT,
-                isCorrect INTEGER
+                isCorrect INTEGER,
+                UNIQUE (englishWord, spanishWord)
             );
         """.trimIndent()
         p0?.execSQL(query)
@@ -34,6 +35,24 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
             put("spanishWord", spanWord)
             put("isCorrect", correct)
         }
-        sqLiteDatabase.insert("translation", null, queryInsert)
+        sqLiteDatabase.insertWithOnConflict("translation", null, queryInsert, SQLiteDatabase.CONFLICT_IGNORE)
+    }
+
+    fun getSpanAndEnglishWord(randomNumber: Int): Cursor{
+        val sqLiteDatabase = this.readableDatabase
+        val cursor = sqLiteDatabase.rawQuery("SELECT englishWord, spanishWord FROM translation WHERE _id = $randomNumber AND isCorrect != 1", null)
+        return cursor
+    }
+    fun getArray(): Cursor{
+        val sqLiteDatabase = this.readableDatabase
+        val cursor = sqLiteDatabase.rawQuery("SELECT _id FROM translation WHERE isCorrect != 1", null)
+        return cursor
+    }
+
+    fun updateIsCorrect(currentIndex: Int){
+        val sqLiteDatabase = this.readableDatabase
+        val contentValues = ContentValues()
+        contentValues.put("isCorrect", 1)
+        sqLiteDatabase.update("translation", contentValues, "_id = $currentIndex", null)
     }
 }
