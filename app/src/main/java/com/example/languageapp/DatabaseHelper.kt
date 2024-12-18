@@ -37,10 +37,36 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         }
         sqLiteDatabase.insertWithOnConflict("translation", null, queryInsert, SQLiteDatabase.CONFLICT_IGNORE)
     }
+    fun isEmpty(): Cursor{
+        val sqLiteDatabase = this.readableDatabase
+        val cursor = sqLiteDatabase.rawQuery("SELECT * FROM translation", null)
+        return cursor
+    }
+    fun isEmptyActTwo(): Cursor{
+        val sqLiteDatabase = this.readableDatabase
+        val cursor = sqLiteDatabase.rawQuery("SELECT * FROM translation WHERE _id > 8", null)
+        return cursor
+    }
+    fun isEmptyActThree(): Cursor{
+        val sqLiteDatabase = this.readableDatabase
+        val cursor = sqLiteDatabase.rawQuery("SELECT * FROM translation WHERE _id > 11", null)
+        return cursor
+    }
 
     fun getSpanAndEnglishWord(randomNumber: Int): Cursor{
         val sqLiteDatabase = this.readableDatabase
         val cursor = sqLiteDatabase.rawQuery("SELECT englishWord, spanishWord FROM translation WHERE _id = $randomNumber AND isCorrect != 1", null)
+        return cursor
+    }
+
+    fun getSpanAndEnglishWordActTwo(randomNumber: Int): Cursor{
+        val sqLiteDatabase = this.readableDatabase
+        val cursor = sqLiteDatabase.rawQuery("SELECT englishWord, spanishWord FROM translation WHERE _id > 8 AND isCorrect != 1 AND _id = $randomNumber", null)
+        return cursor
+    }
+    fun getSpanAndEnglishWordActThree(randomNumber: Int): Cursor{
+        val sqLiteDatabase = this.readableDatabase
+        val cursor = sqLiteDatabase.rawQuery("SELECT englishWord, spanishWord FROM translation WHERE _id > 11 AND isCorrect != 1 AND _id = $randomNumber", null)
         return cursor
     }
     fun getArray(): Cursor{
@@ -48,6 +74,19 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         val cursor = sqLiteDatabase.rawQuery("SELECT _id FROM translation WHERE isCorrect != 1", null)
         return cursor
     }
+
+    fun getArrayActTwo(): Cursor{
+        val sqLiteDatabase = this.readableDatabase
+        val cursor = sqLiteDatabase.rawQuery("SELECT _id FROM translation WHERE isCorrect != 1 AND _id > 8", null)
+        return cursor
+    }
+
+    fun getArrayActThree(): Cursor{
+        val sqLiteDatabase = this.readableDatabase
+        val cursor = sqLiteDatabase.rawQuery("SELECT _id FROM translation WHERE isCorrect != 1 AND _id > 11", null)
+        return cursor
+    }
+
 
     fun updateIsCorrect(currentIndex: Int){
         val sqLiteDatabase = this.readableDatabase

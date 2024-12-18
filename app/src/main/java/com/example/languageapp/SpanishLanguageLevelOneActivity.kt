@@ -6,6 +6,8 @@ import android.database.Cursor
 import android.os.Bundle
 import android.os.LocaleList
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -33,19 +35,25 @@ import kotlin.random.nextInt
 
 class SpanishLanguageLevelOneActivity : AppCompatActivity() {
     private val ourInputs = arrayListOf("yes", "library", "where", "dog", "cat", "red", "green", "blue")
+//    private val ourInputs = arrayListOf("cat", "red")
     private lateinit var spanishInput: EditText
     private lateinit var englishTarget: TextView
     private lateinit var databaseHelper: DatabaseHelper
+    private lateinit var cursor: Cursor
     private var dbEnglishWord = 0
     private var dbSpanishWord = 0
-    private lateinit var cursor: Cursor
     private var index = 0
     private var randomInt = 0
     private var ourNumbers = arrayListOf<Int>()
+    private var dbEmpty = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_spanish_language_level_one)
+
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.actOneToolbar)
+        setSupportActionBar(toolbar)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -59,15 +67,21 @@ class SpanishLanguageLevelOneActivity : AppCompatActivity() {
         spanishInput.setImeHintLocales(LocaleList(Locale("es", "MX")))
         englishTarget = findViewById(R.id.actOneText)
         databaseHelper = DatabaseHelper(applicationContext)
-        getOurArray()
-        if(ourNumbers.isNotEmpty()){
+        cursor = databaseHelper.isEmpty()
+        if(cursor.moveToFirst()){
+            dbEmpty = true
+            getOurArray()
             println(ourNumbers)
-            getRandomWord()
-            println(randomInt)
-        }else if(ourNumbers.isEmpty() && spanishInput.text.isEmpty()){
-//            println(ourNumbers.isEmpty())
-            showAllCorrectDialog()
+            if(ourNumbers.isNotEmpty()){
+                println(ourNumbers)
+                getRandomWord()
+                println(randomInt)
+            }else if(ourNumbers.isEmpty() && spanishInput.text.isEmpty()){
+                println(ourNumbers.isEmpty())
+                showAllCorrectDialog()
+            }
         }else{
+            dbEmpty = false
             fetchOurSpanishWords()
         }
 
@@ -175,12 +189,27 @@ class SpanishLanguageLevelOneActivity : AppCompatActivity() {
     private fun getOurArray(){
         cursor = databaseHelper.getArray()
         while (cursor.moveToNext()){
-//            println(cursor.getString(0))
+            println(cursor.getString(0))
             ourNumbers.add(cursor.getString(0).toInt())
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.home_layout, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.homeButton ->{
+                // Where to go from here instead of just toasting later
+                //Toast.makeText(this, "Back Button Clicked", Toast.LENGTH_SHORT).show()
+                val intent = Intent(applicationContext, LevelSelectionActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

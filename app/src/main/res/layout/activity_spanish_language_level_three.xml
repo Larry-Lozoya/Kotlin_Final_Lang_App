@@ -5,6 +5,81 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ourColor"
     tools:context=".SpanishLanguageLevelThreeActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/actThreeToolbar"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/actThreeInstructionsText"
+        android:layout_width="345dp"
+        android:layout_height="167dp"
+        android:gravity="center"
+        android:text="Please Provide The Spanish Translation For the Provided English Sentence."
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.53"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actThreeToolbar" />
+
+    <TextView
+        android:id="@+id/actThreeEnglishTarget"
+        android:layout_width="342dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="test"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actThreeInstructionsText" />
+
+    <Button
+        android:id="@+id/actThreeVoiceToSpeechButton"
+        android:layout_width="305dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="104dp"
+        android:text="VOICE TO SPEECH"
+        android:onClick="actThreeVoiceToSpeechButton"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actThreeEnglishTarget" />
+
+    <Button
+        android:id="@+id/actThreeSubmitButton"
+        android:layout_width="309dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="56dp"
+        android:onClick="actThreeSubmitButton"
+        android:text="SUBMIT"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actThreeVoiceToSpeechButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/actThreeSpanishInput"
+        android:layout_width="341dp"
+        android:layout_height="58dp"
+        android:gravity="center"
+        android:hint="Please Click Button Below For Voice"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/actThreeVoiceToSpeechButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actThreeEnglishTarget"
+        app:layout_constraintVertical_bias="0.26" />
 </androidx.constraintlayout.widget.ConstraintLayout>
