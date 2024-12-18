@@ -182,7 +182,7 @@ class SpanishLanguageLevelTwoActivity : AppCompatActivity() {
         builder.setMessage("You have gotten every entry correct!!")
 
         builder.setPositiveButton("BACK"){ dialog, which->
-            Toast.makeText(this, "ourBackButton", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Completed", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, LevelSelectionActivity::class.java)
             startActivity(intent)
         }
