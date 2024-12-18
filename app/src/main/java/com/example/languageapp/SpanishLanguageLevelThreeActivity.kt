@@ -100,15 +100,25 @@ class SpanishLanguageLevelThreeActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "YOUR ARE INCORRECT!!!", Toast.LENGTH_SHORT).show()
         }
     }
+    // Its been a while since I saw the video for how to do this but im pretty sure that this is
+    // The video that i saw for how to do text to speech
+    // Source: https://www.youtube.com/watch?v=yNCBWmSSV4Y
 
     fun actThreeVoiceToSpeechButton(view: View) {
+        // The way that this works for the text to speech is that we need to have an intent
+        // Where we want to get a RecognizerIntent to recognize our speech
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        // This is where we are just trying to get all the things from the speech
+        // For example where we have the Locale we want it to pick up on the Spanish Language
+        // As well as for the prompt that is what will be shown through the popup
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
         intent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", "es_ES");
         intent.putExtra(RecognizerIntent.EXTRA_RESULTS, Locale("es", "ES"))
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something In Spanish...")
         activityResultLauncher.launch(intent)
     }
+    // This is where we will be gathering our information from the speech to where if our result code is an OK
+    // Then we are able to grab that data from that and then put that into our text field
     private val activityResultLauncher :ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result ->
