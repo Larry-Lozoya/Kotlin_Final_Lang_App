@@ -29,7 +29,7 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         TODO("Not yet implemented")
     }
     fun putItemsIntoDB(engWord: String, spanWord: String, correct: Int){
-        val sqLiteDatabase = this.readableDatabase
+        val sqLiteDatabase = this.writableDatabase
         val queryInsert = ContentValues().apply {
             put("englishWord", engWord)
             put("spanishWord", spanWord)
@@ -86,12 +86,16 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         val cursor = sqLiteDatabase.rawQuery("SELECT _id FROM translation WHERE isCorrect != 1 AND _id > 11", null)
         return cursor
     }
-
-
     fun updateIsCorrect(currentIndex: Int){
-        val sqLiteDatabase = this.readableDatabase
+        val sqLiteDatabase = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put("isCorrect", 1)
+        sqLiteDatabase.update("translation", contentValues, "_id = $currentIndex", null)
+    }
+    fun updateIsCorrectToReset(currentIndex: Int){
+        val sqLiteDatabase = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put("isCorrect", 0)
         sqLiteDatabase.update("translation", contentValues, "_id = $currentIndex", null)
     }
 }

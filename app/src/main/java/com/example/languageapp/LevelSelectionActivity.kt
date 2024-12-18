@@ -4,6 +4,7 @@ import android.content.ClipData.Item
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -56,7 +57,7 @@ class LevelSelectionActivity : AppCompatActivity(), ItemAdapter.ItemAdapterListe
                 intent.putExtra("ID", position)
                 startActivity(intent)
             }else{
-                levelDialog("Attempt Level 1 First", "You must Attempt level one first before you move to level 2!!!!", "2")
+                levelDialog("Attempt Level 1 First", "You must Attempt level one first before you move to level 2!!!!", "1")
                 dbEmpty = false
             }
         }
@@ -68,7 +69,7 @@ class LevelSelectionActivity : AppCompatActivity(), ItemAdapter.ItemAdapterListe
                 intent.putExtra("ID", position)
                 startActivity(intent)
             }else{
-                levelDialog("Attempt Level 1 and 2 First", "You must Attempt level one first and level 2 before you move to level 3!!!!" , "3")
+                levelDialog("Attempt Level 1 and 2 First", "You must Attempt level one first and level 2 before you move to level 3!!!!" , "2 and 1")
                 dbEmpty = false
             }
         }
@@ -79,7 +80,7 @@ class LevelSelectionActivity : AppCompatActivity(), ItemAdapter.ItemAdapterListe
         builder.setMessage(message)
 
         builder.setPositiveButton("BACK"){ dialog, which->
-            Toast.makeText(this, "PLEASE FINISH LEVEL $toast", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "PLEASE ATTEMPT LEVELS $toast", Toast.LENGTH_SHORT).show()
         }
         builder.show()
     }
@@ -87,5 +88,30 @@ class LevelSelectionActivity : AppCompatActivity(), ItemAdapter.ItemAdapterListe
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.level_start_over, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.levelOneRestart ->{
+//                println("Do we get here?")
+                for(i in 1..7){
+                    databaseHelper.updateIsCorrectToReset(i)
+                    println(i)
+                }
+                true
+            }
+            R.id.levelTwoRestart ->{
+                for(i in 8..11){
+                    databaseHelper.updateIsCorrectToReset(i)
+                    println(i)
+                }
+                true
+            }
+            R.id.levelThreeRestart ->{
+                databaseHelper.updateIsCorrectToReset(12)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

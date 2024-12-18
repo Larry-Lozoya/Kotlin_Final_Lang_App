@@ -2,6 +2,7 @@ package com.example.languageapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.widget.AdapterView
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -17,6 +18,10 @@ class LanguageSelectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_language_selection)
+
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.languageSelectionToolbar)
+        setSupportActionBar(toolbar)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -45,5 +50,9 @@ class LanguageSelectionActivity : AppCompatActivity() {
                 // println(i)
             })
         }
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.language_selection_menu, menu)
+        return true
     }
 }
